@@ -2,7 +2,7 @@
 缓解并发编程过程中，由并发实体间数据相互依赖所带来的代码复杂度问题。
 
 ## 如何使用
-参见
+参见 [xdepend_test.go](https://github.com/zeuszhao-hub/xdepend/blob/main/xdepend_test.go)
 
 
 ## 说明
