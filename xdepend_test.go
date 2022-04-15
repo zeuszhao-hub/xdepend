@@ -252,7 +252,7 @@ func BenchmarkNewDepend(bb *testing.B) {
 			return nil, err
 		}
 
-		// 获取c的名字
+		// 获取e的名字
 		ename, err := getEName(ctx, true)
 		if err != nil {
 			return nil, err
