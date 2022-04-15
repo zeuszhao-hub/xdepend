@@ -21,7 +21,6 @@ c := NewService().Handle(func())
 d := NewService().Handle(func())
 e := NewService().Handle(func())
 
-// 依赖描述，a依赖于b、c，b独立，c独立
 err := NewDepend().AddDescribe(a, b, c, d, e)
                   .AddDescribe(b)
                   .AddDescribe(c,d)
