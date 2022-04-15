@@ -1,5 +1,5 @@
 # xdepend
-缓解并发编程过程中，由并发实体间数据相互依赖所带来的代码复杂度问题。
+解决多任务并发过程中，任务间相互数据依赖问题带来的代码复杂度问题。
 
 ## 如何使用
 参见 [xdepend_test.go](https://github.com/zeuszhao-hub/xdepend/blob/main/xdepend_test.go)
