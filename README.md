@@ -4,7 +4,6 @@
 ## 如何使用
 参见 [xdepend_test.go](https://github.com/zeuszhao-hub/xdepend/blob/main/xdepend_test.go)
 
-
 ## 说明
 ```text
 // 依赖关系
