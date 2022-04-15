@@ -89,12 +89,12 @@ func getEName(ctx context.Context, b bool) (string, error) {
 }
 
 func TestNewDepend(t *testing.T) {
-	a := NewService().Handle(func(ctx context.Context, retCollector *RetCollector) (interface{}, error) {
+	a := NewService().Handle(func(ctx context.Context, values *values) (interface{}, error) {
 		ab := B{}
 		ac := C{}
 		ad := D{}
 		ae := E{}
-		err := retCollector.Values(&ab, &ac, &ad, &ae)
+		err := values.Values(&ab, &ac, &ad, &ae)
 		if err != nil {
 			return nil, err
 		}
@@ -113,7 +113,7 @@ func TestNewDepend(t *testing.T) {
 		}, nil
 	})
 
-	b := NewService().Handle(func(ctx context.Context, retCollector *RetCollector) (interface{}, error) {
+	b := NewService().Handle(func(ctx context.Context, values *values) (interface{}, error) {
 		// 获取b的名字
 		bname, err := getBName(ctx, false)
 		if err != nil {
@@ -122,9 +122,9 @@ func TestNewDepend(t *testing.T) {
 		return B{Name: bname}, nil
 	})
 
-	c := NewService().Handle(func(ctx context.Context, retCollector *RetCollector) (interface{}, error) {
+	c := NewService().Handle(func(ctx context.Context, values *values) (interface{}, error) {
 		cd := D{}
-		err := retCollector.Values(&cd)
+		err := values.Values(&cd)
 		if err != nil {
 			return nil, err
 		}
@@ -140,7 +140,7 @@ func TestNewDepend(t *testing.T) {
 		}, nil
 	})
 
-	d := NewService().Handle(func(ctx context.Context, retCollector *RetCollector) (interface{}, error) {
+	d := NewService().Handle(func(ctx context.Context, values *values) (interface{}, error) {
 		// 获取b的名字
 		dname, err := getDName(ctx, false)
 		if err != nil {
@@ -149,9 +149,9 @@ func TestNewDepend(t *testing.T) {
 		return D{Name: dname}, nil
 	})
 
-	e := NewService().Handle(func(ctx context.Context, retCollector *RetCollector) (interface{}, error) {
+	e := NewService().Handle(func(ctx context.Context, values *values) (interface{}, error) {
 		ed := D{}
-		err := retCollector.Values(&ed)
+		err := values.Values(&ed)
 		if err != nil {
 			return nil, err
 		}
@@ -185,12 +185,12 @@ func TestNewDepend(t *testing.T) {
 }
 
 func BenchmarkNewDepend(bb *testing.B) {
-	a := NewService().Handle(func(ctx context.Context, retCollector *RetCollector) (interface{}, error) {
+	a := NewService().Handle(func(ctx context.Context, values *values) (interface{}, error) {
 		ab := B{}
 		ac := C{}
 		ad := D{}
 		ae := E{}
-		err := retCollector.Values(&ab, &ac, &ad, &ae)
+		err := values.Values(&ab, &ac, &ad, &ae)
 		if err != nil {
 			return nil, err
 		}
@@ -209,7 +209,7 @@ func BenchmarkNewDepend(bb *testing.B) {
 		}, nil
 	})
 
-	b := NewService().Handle(func(ctx context.Context, retCollector *RetCollector) (interface{}, error) {
+	b := NewService().Handle(func(ctx context.Context, values *values) (interface{}, error) {
 		// 获取b的名字
 		bname, err := getBName(ctx, true)
 		if err != nil {
@@ -218,9 +218,9 @@ func BenchmarkNewDepend(bb *testing.B) {
 		return B{Name: bname}, nil
 	})
 
-	c := NewService().Handle(func(ctx context.Context, retCollector *RetCollector) (interface{}, error) {
+	c := NewService().Handle(func(ctx context.Context, values *values) (interface{}, error) {
 		cd := D{}
-		err := retCollector.Values(&cd)
+		err := values.Values(&cd)
 		if err != nil {
 			return nil, err
 		}
@@ -236,7 +236,7 @@ func BenchmarkNewDepend(bb *testing.B) {
 		}, nil
 	})
 
-	d := NewService().Handle(func(ctx context.Context, retCollector *RetCollector) (interface{}, error) {
+	d := NewService().Handle(func(ctx context.Context, values *values) (interface{}, error) {
 		// 获取b的名字
 		dname, err := getDName(ctx, true)
 		if err != nil {
@@ -245,9 +245,9 @@ func BenchmarkNewDepend(bb *testing.B) {
 		return D{Name: dname}, nil
 	})
 
-	e := NewService().Handle(func(ctx context.Context, retCollector *RetCollector) (interface{}, error) {
+	e := NewService().Handle(func(ctx context.Context, values *values) (interface{}, error) {
 		ed := D{}
-		err := retCollector.Values(&ed)
+		err := values.Values(&ed)
 		if err != nil {
 			return nil, err
 		}

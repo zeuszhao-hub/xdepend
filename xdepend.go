@@ -7,7 +7,7 @@ import (
 import "golang.org/x/sync/errgroup"
 import "encoding/json"
 
-type fun func(ctx context.Context, retCollector *RetCollector) (interface{}, error)
+type fun func(ctx context.Context, retCollector *values) (interface{}, error)
 
 // base 包转fn的执行状态和返回值，rets是依赖对象的返回值列表
 type base struct {
@@ -22,18 +22,18 @@ type ret struct {
 	err error
 }
 
-// RetCollector service结果收集器
-type RetCollector []*ret
+// values service结果收集器
+type values []*ret
 
 // Values 设置service结果到target
-func (r *RetCollector) Values(target ...interface{}) error {
+func (r *values) Values(target ...interface{}) error {
 	for _, ret := range *r {
 		errRet := ret.Error()
 		if errRet != nil {
 			return errRet
 		}
 
-		err := ret.Value(target...)
+		err := ret.value(target...)
 		if err != nil {
 			return err
 		}
@@ -41,8 +41,8 @@ func (r *RetCollector) Values(target ...interface{}) error {
 	return nil
 }
 
-// Value 获取依赖对象的返回值，对`target`赋值
-func (r *ret) Value(target ...interface{}) error {
+// value 获取依赖对象的返回值，对`target`赋值
+func (r *ret) value(target ...interface{}) error {
 	t := reflect.TypeOf(r.ret)
 	for i, _ := range target {
 		tt := reflect.TypeOf(target[i])
@@ -109,18 +109,18 @@ func do(ctxp context.Context, depdesc ...describe) error {
 			return func(ii int) error {
 				if len(depdesc[ii].dep) != 0 {
 					func() {
-						retfnCollector := make(RetCollector, 0)
+						values := make(values, 0)
 						for _, dep := range depdesc[ii].dep {
 							if dep == nil {
 								continue
 							}
 							<-dep.status
-							retfnCollector = append(retfnCollector, dep.ret)
+							values = append(values, dep.ret)
 						}
-						depdesc[ii].me.ret.ret, depdesc[ii].me.ret.err = depdesc[ii].me.fn(ctx, &retfnCollector)
+						depdesc[ii].me.ret.ret, depdesc[ii].me.ret.err = depdesc[ii].me.fn(ctx, &values)
 					}()
 				} else {
-					retfnNil := make(RetCollector, 0)
+					retfnNil := make(values, 0)
 					depdesc[ii].me.ret.ret, depdesc[ii].me.ret.err = depdesc[ii].me.fn(ctx, &retfnNil)
 				}
 				close(depdesc[ii].me.status)
